@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         mErrorMessage = (TextView) findViewById(R.id.tv_error_message_display);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
         mMovieItemAdapter = new MovieItemAdapter(this, getRawData());
-        mRecyclerViewLayoutManager = new GridLayoutManager(this, 2);
+        mRecyclerViewLayoutManager = new GridLayoutManager(this, 3);
 
         mMovieRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_movies);
         mMovieRecyclerView.setHasFixedSize(true);
