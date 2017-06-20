@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //FIXME load from file for now
+    // FIXME: load from local file, for now.
     public String loadJSONFromAsset() {
         String json = null;
         try {
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         return json;
     }
 
+    // TODO: move this logic to an network utils.
     public List<MovieItem> getRawData(){
         ArrayList<MovieItem> movieList = new ArrayList<MovieItem>();
         try {
