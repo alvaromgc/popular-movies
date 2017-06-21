@@ -28,7 +28,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MovieItemAdapter.ListItemClickListener{
 
-    // TODO: code the intent to the detail view
     // TODO: code network util to connect to the api
     // TODO: code the radio to switch filter
 
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements MovieItemAdapter.
 
     // TODO remove both when intents are implemented
     private static final String TAG = MovieItemAdapter.class.getSimpleName();
-    private Toast mToast;
 
     // TODO: remove when NetworkUtil is working
     List<MovieItem> tempListMovies = new ArrayList<>();
@@ -78,26 +76,6 @@ public class MainActivity extends AppCompatActivity implements MovieItemAdapter.
 
     @Override
     public void onListItemClick(int clickedItemIndex) {
-        // COMPLETED (12) Show a Toast when an item is clicked, displaying that item number that was clicked
-        /*
-        if (mToast != null) {
-            mToast.cancel();
-        }
-
-
-        Log.d(TAG, "RECEIVING CLICK");
-
-
-         * Create a Toast and store it in our Toast field.
-         * The Toast that shows up will have a message similar to the following:
-         *
-         *                     Item #42 clicked.
-
-        String toastMessage = "Item #" + tempListMovies.get(clickedItemIndex).originalName + " clicked.";
-        mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_LONG);
-
-        mToast.show();*/
-
         try {
             JSONObject jsonItemClicked = (JSONObject) mJsonMovieArray.get(clickedItemIndex);
 
@@ -115,8 +93,6 @@ public class MainActivity extends AppCompatActivity implements MovieItemAdapter.
             // FIXME start error message
             Log.d(TAG, "Json error :"+e.getMessage());
         }
-
-
 
     }
 
