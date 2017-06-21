@@ -6,9 +6,9 @@ package com.example.android.popularmovies.adapter;
 
 public class MovieItem {
 
-    public String originalName;
-    public String jpegImageName;
-    public String imageApiBasePath;
+    public final String originalName;
+    public final String jpegImageName;
+    public final String imageApiBasePath;
 
     public MovieItem(String originalName, String jpegImageName, String imageApiBasePath){
         this.originalName = originalName;

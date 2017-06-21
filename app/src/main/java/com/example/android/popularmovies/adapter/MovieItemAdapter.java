@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.popularmovies.R;
-import com.example.android.popularmovies.viewholder.MovieViewHolder;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -20,20 +20,33 @@ import java.util.List;
  * Created by alvaro.carvalho on 20/06/17.
  */
 
-public class MovieItemAdapter extends RecyclerView.Adapter<MovieViewHolder>{
+public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.MovieViewHolder>{
+    // TODO: REMOVE
+    private static final String TAG = MovieItemAdapter.class.getSimpleName();
 
     private List<MovieItem> mMovieItems;
 
     private Context mContext;
+
+    final private ListItemClickListener mOnClickListener;
+
+    /**
+     * The interface that receives onClick messages.
+     */
+    public interface ListItemClickListener {
+        void onListItemClick(int clickedItemIndex);
+    }
 
     /**
      * Custom constructor for the movie adapter.
      * @param context
      * @param movieItemList
      */
-    public MovieItemAdapter(@NonNull Context context, @NonNull List<MovieItem> movieItemList) {
+    public MovieItemAdapter(@NonNull Context context, @NonNull List<MovieItem> movieItemList,
+                            @NonNull ListItemClickListener listener) {
         this.mMovieItems = movieItemList;
         this.mContext = context;
+        this.mOnClickListener = listener;
     }
 
     /**
@@ -50,9 +63,7 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieViewHolder>{
         // Inflate the custom layout
         View movieView = inflater.inflate(R.layout.recycler_view_movies, parent, false);
 
-        // Return a new holder instance
-        MovieViewHolder viewHolder = new MovieViewHolder(movieView);
-        return viewHolder;
+        return new MovieViewHolder(movieView);
     }
 
 
@@ -98,4 +109,37 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieViewHolder>{
     private Uri createImageUri(MovieItem movieItem){
         return Uri.parse(movieItem.imageApiBasePath+movieItem.jpegImageName);
     }
+
+    /**
+     * Class of the holder view
+     */
+    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView mMovieTitleView;
+        public ImageView mMovieImageView;
+
+        /**
+         * Constructor to the item view holder of the recycler view.
+         *
+         * @param itemView
+         */
+        public MovieViewHolder(View itemView) {
+            super(itemView);
+            mMovieTitleView = (TextView) itemView.findViewById(R.id.movie_title);
+            mMovieImageView = (ImageView) itemView.findViewById(R.id.movie_image);
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Called upon a click in one list item.
+         *
+         * @param v clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            int clickedPosition = getAdapterPosition();
+            Log.d(TAG, "CLICKED ON ITEM ::"+clickedPosition );
+            mOnClickListener.onListItemClick(clickedPosition);
+        }
+    }
+
 }

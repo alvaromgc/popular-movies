@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.popularmovies.adapter.MovieItem;
 import com.example.android.popularmovies.adapter.MovieItemAdapter;
@@ -19,15 +20,25 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieItemAdapter.ListItemClickListener{
 
-    private RecyclerView mMovieRecyclerView;
-    private TextView mErrorMessage;
-    private ProgressBar mLoadingIndicator;
-    private MovieItemAdapter mMovieItemAdapter;
+    // TODO: code the intent to the detail view
+    // TODO: code network util to connect to the api
+    // TODO: code the radio to switch filter
+
+    RecyclerView mMovieRecyclerView;
+    TextView mErrorMessage;
+    ProgressBar mLoadingIndicator;
+    MovieItemAdapter mMovieItemAdapter;
+
+    // TODO remove both when intents are implemented
+    private static final String TAG = MovieItemAdapter.class.getSimpleName();
+    private Toast mToast;
+
+    // TODO: remove when NetworkUtil is working
+    List<MovieItem> tempListMovies = new ArrayList<>();
 
     RecyclerView.LayoutManager mRecyclerViewLayoutManager;
 
@@ -37,9 +48,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // TODO remove
+        tempListMovies = getRawData();
+
         mErrorMessage = (TextView) findViewById(R.id.tv_error_message_display);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
-        mMovieItemAdapter = new MovieItemAdapter(this, getRawData());
+        mMovieItemAdapter = new MovieItemAdapter(this, tempListMovies, this);
         mRecyclerViewLayoutManager = new GridLayoutManager(this, 3);
 
         mMovieRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_movies);
@@ -47,6 +61,28 @@ public class MainActivity extends AppCompatActivity {
         mMovieRecyclerView.setLayoutManager(mRecyclerViewLayoutManager);
         mMovieRecyclerView.setAdapter(mMovieItemAdapter);
 
+    }
+
+    @Override
+    public void onListItemClick(int clickedItemIndex) {
+        if (mToast != null) {
+            mToast.cancel();
+        }
+
+
+        Log.d(TAG, "RECEIVING CLICK");
+
+        // COMPLETED (12) Show a Toast when an item is clicked, displaying that item number that was clicked
+        /*
+         * Create a Toast and store it in our Toast field.
+         * The Toast that shows up will have a message similar to the following:
+         *
+         *                     Item #42 clicked.
+         */
+        String toastMessage = "Item #" + tempListMovies.get(clickedItemIndex).originalName + " clicked.";
+        mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_LONG);
+
+        mToast.show();
     }
 
     // FIXME: load from local file, for now.
