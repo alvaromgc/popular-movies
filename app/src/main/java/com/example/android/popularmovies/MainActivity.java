@@ -1,10 +1,14 @@
 package com.example.android.popularmovies;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements MovieItemAdapter.
     // TODO: remove when NetworkUtil is working
     List<MovieItem> tempListMovies = new ArrayList<>();
 
+    JSONArray mJsonMovieArray;
+
     RecyclerView.LayoutManager mRecyclerViewLayoutManager;
 
 
@@ -64,7 +70,16 @@ public class MainActivity extends AppCompatActivity implements MovieItemAdapter.
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
     public void onListItemClick(int clickedItemIndex) {
+        // COMPLETED (12) Show a Toast when an item is clicked, displaying that item number that was clicked
+        /*
         if (mToast != null) {
             mToast.cancel();
         }
@@ -72,17 +87,37 @@ public class MainActivity extends AppCompatActivity implements MovieItemAdapter.
 
         Log.d(TAG, "RECEIVING CLICK");
 
-        // COMPLETED (12) Show a Toast when an item is clicked, displaying that item number that was clicked
-        /*
+
          * Create a Toast and store it in our Toast field.
          * The Toast that shows up will have a message similar to the following:
          *
          *                     Item #42 clicked.
-         */
+
         String toastMessage = "Item #" + tempListMovies.get(clickedItemIndex).originalName + " clicked.";
         mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_LONG);
 
-        mToast.show();
+        mToast.show();*/
+
+        try {
+            JSONObject jsonItemClicked = (JSONObject) mJsonMovieArray.get(clickedItemIndex);
+
+            Context context = this;
+
+            Class destinationClass = DetailActivity.class;
+
+            Intent startDetailActivityIntent = new Intent(context, destinationClass);
+
+            Log.d(TAG, "Json Intent :"+jsonItemClicked.toString());
+
+            startDetailActivityIntent.putExtra("jsonMovieItem", jsonItemClicked.toString());
+            startActivity(startDetailActivityIntent);
+        } catch (JSONException e) {
+            // FIXME start error message
+            Log.d(TAG, "Json error :"+e.getMessage());
+        }
+
+
+
     }
 
     // FIXME: load from local file, for now.
@@ -105,21 +140,26 @@ public class MainActivity extends AppCompatActivity implements MovieItemAdapter.
     // TODO: move this logic to an network utils.
     public List<MovieItem> getRawData(){
         ArrayList<MovieItem> movieList = new ArrayList<MovieItem>();
+        JSONArray jsonMovieArray = null;
         try {
             JSONObject obj = new JSONObject(loadJSONFromAsset());
-            JSONArray jsonMovieArray = obj.getJSONArray("results");
+            jsonMovieArray = obj.getJSONArray("results");
 
 
             for (int i = 0; i < jsonMovieArray.length(); i++) {
                 JSONObject jo = jsonMovieArray.getJSONObject(i);
                 Log.d("Details-->", jo.getString("title"));
                 MovieItem movieItem = new MovieItem(jo.getString("original_title"),
-                        jo.getString("poster_path"), AppStaticData.getW185Image());
+                        jo.getString("poster_path"), AppStaticData.getW185PathImage());
                 movieList.add(movieItem);
             }
+
         } catch(JSONException e){
             Log.d("Error-->", e.getMessage());
         }
+        //
+        mJsonMovieArray = jsonMovieArray;
+
         return movieList;
     }
 }

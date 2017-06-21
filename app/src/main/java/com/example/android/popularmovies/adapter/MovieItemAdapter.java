@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.popularmovies.R;
+import com.example.android.popularmovies.data.AppStaticData;
+import com.example.android.popularmovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -81,7 +83,8 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.Movi
         TextView movieTitleView = viewHolder.mMovieTitleView;
         movieTitleView.setText(movieItem.originalName);
         ImageView movieImageView = viewHolder.mMovieImageView;
-        Picasso.with(getContext()).load(createImageUri(movieItem)).into(movieImageView);
+        Picasso.with(getContext()).load(NetworkUtils.createImageUri(AppStaticData.getW185PathImage(),
+                movieItem.jpegImageName)).into(movieImageView);
     }
 
     /**
@@ -99,15 +102,6 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.Movi
 
     private Context getContext() {
         return mContext;
-    }
-
-    /**
-     *
-     * @param movieItem
-     * @return the URI of an movie image on the <a href="http://themoviedb.org">themoviedb.org</a> API
-     */
-    private Uri createImageUri(MovieItem movieItem){
-        return Uri.parse(movieItem.imageApiBasePath+movieItem.jpegImageName);
     }
 
     /**
