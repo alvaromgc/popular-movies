@@ -1,10 +1,8 @@
 package com.example.android.popularmovies.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,7 @@ import com.example.android.popularmovies.data.AppStaticData;
 import com.example.android.popularmovies.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +25,7 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.Movi
     // TODO: REMOVE
     private static final String TAG = MovieItemAdapter.class.getSimpleName();
 
-    private List<MovieItem> mMovieItems;
+    private List<MovieItem> mMovieItems = new ArrayList<>();
 
     private Context mContext;
 
@@ -40,22 +39,22 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.Movi
     }
 
     /**
-     * Custom constructor for the movie adapter.
-     * @param context
-     * @param movieItemList
+     * Custom constructor for the item adapter.
+     * @param context activity context.
+     * @param listener interface for the item click listener.
      */
     public MovieItemAdapter(@NonNull Context context, @NonNull List<MovieItem> movieItemList,
                             @NonNull ListItemClickListener listener) {
-        this.mMovieItems = movieItemList;
         this.mContext = context;
         this.mOnClickListener = listener;
+        this.mMovieItems = movieItemList;
     }
 
     /**
      * Inflates the item to the movie view holder.
-     * @param parent
+     * @param parent the parent view holding the context.
      * @param viewType
-     * @return the view holder to an movie item
+     * @return the view holder to an movie item.
      */
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -104,6 +103,10 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.Movi
         return mContext;
     }
 
+    public void setMovieItems(List<MovieItem> movieItems){
+        this.mMovieItems = movieItems;
+    }
+
     /**
      * Class of the holder view
      */
@@ -131,7 +134,6 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.Movi
         @Override
         public void onClick(View v) {
             int clickedPosition = getAdapterPosition();
-            Log.d(TAG, "CLICKED ON ITEM ::"+clickedPosition );
             mOnClickListener.onListItemClick(clickedPosition);
         }
     }

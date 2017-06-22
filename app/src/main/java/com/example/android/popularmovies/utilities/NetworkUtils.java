@@ -5,8 +5,12 @@ import android.util.Log;
 
 import com.example.android.popularmovies.data.AppStaticData;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Scanner;
 
 /**
  * Created by alvaro.carvalho on 21/06/17.
@@ -28,9 +32,9 @@ public class NetworkUtils {
 
     /**
      *
-     * @param isPopularList boolean indicating if is the list of popular or top rated movies
-     * @param page number of the page to query
-     * @return the complete URL to query form movies
+     * @param isPopularList boolean indicating if is the list of popular or top rated movies.
+     * @param page number of the page to query.
+     * @return the complete URL to query for movies list.
      */
     public static URL buildUrl(boolean isPopularList, Integer page) {
         String movieListTypeBase = AppStaticData.MOVIEDB_BASE_API_PATH + (isPopularList ?
@@ -52,6 +56,34 @@ public class NetworkUtils {
         }
 
         return url;
+    }
+
+    /**
+     * This method returns the entire result from the HTTP response.
+     *
+     * @param url The URL to fetch the HTTP response from.
+     * @return The contents of the HTTP response.
+     * @throws IOException Related to network and stream reading
+     */
+    public static String getResponseFromHttpUrl(URL url) throws IOException {
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        try {
+
+            InputStream in = urlConnection.getInputStream();
+            Scanner scanner = new Scanner(in);
+            scanner.useDelimiter("\\A");
+
+
+            boolean hasInput = scanner.hasNext();
+            if (hasInput) {
+                return scanner.next();
+            } else {
+                Log.e(TAG, "Error fetching data from urlConnection! Connection response is null.");
+                return null;
+            }
+        } finally {
+            urlConnection.disconnect();
+        }
     }
 
 }

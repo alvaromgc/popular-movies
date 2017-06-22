@@ -1,8 +1,9 @@
 package com.example.android.popularmovies;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DetailActivity extends AppCompatActivity {
+
+    private static final String TAG = DetailActivity.class.getSimpleName();
 
     ImageView mMoviePoster;
     TextView mOriginalTitle;
@@ -42,19 +45,24 @@ public class DetailActivity extends AppCompatActivity {
         Intent intentOrigin = getIntent();
 
         // COMPLETED (2) Display the weather forecast that was passed from MainActivity
-        if (intentOrigin != null) {
-            if (intentOrigin.hasExtra("jsonMovieItem")) {
-                try {
-                    JSONObject  jsonMovieItem = new JSONObject(intentOrigin.getStringExtra("jsonMovieItem"));
-                    Picasso.with(this).load(NetworkUtils.createImageUri(AppStaticData.getW342PathImage(),
-                            jsonMovieItem.getString("poster_path"))).into(mMoviePoster);
-                    mOriginalTitle.setText(jsonMovieItem.getString("original_title"));
-                    mPlotSynopsis.setText(jsonMovieItem.getString("overview"));
-                    mReleaseDate.setText(jsonMovieItem.getString("release_date"));
-                    mUserRating.setText(jsonMovieItem.getString("vote_average"));
-                } catch (JSONException e) {
-                    // FIXME: code an error message to deal w error
-                }
+        if (intentOrigin != null && intentOrigin.hasExtra("jsonMovieItem")) {
+            try {
+                JSONObject  jsonMovieItem =
+                        new JSONObject(intentOrigin.getStringExtra("jsonMovieItem"));
+                Picasso.with(this).load(NetworkUtils
+                        .createImageUri(AppStaticData.getW342PathImage(),jsonMovieItem
+                                .getString(AppStaticData.MOVIEDB_RESPONSE_POSTER_PATH_NAME)))
+                        .into(mMoviePoster);
+                mOriginalTitle.setText(jsonMovieItem
+                        .getString(AppStaticData.MOVIEDB_RESPONSE_ORIGINAL_TITLE_NAME));
+                mPlotSynopsis.setText(jsonMovieItem
+                        .getString(AppStaticData.MOVIEDB_RESPONSE_OVERVIEW_PATH_NAME));
+                mReleaseDate.setText(jsonMovieItem
+                        .getString(AppStaticData.MOVIEDB_RESPONSE__RELEASE_DATE_PATH_NAME));
+                mUserRating.setText(jsonMovieItem
+                        .getString(AppStaticData.MOVIEDB_RESPONSE_VOTE_AVERAGE_PATH_NAME));
+            } catch (JSONException e) {
+                Log.e(TAG, "Error parsing json result data.");
             }
         }
 
