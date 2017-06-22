@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+    <string name="detail_activity_title">Movie Details</string>
     <string name="main_screen_error_message">Error fetching data! Check your internet connection
         and make sure you have inserted the themoviedb.org API key. </string>
     <string name="contentDescriptionMovieImage">Movie poster image.</string>
@@ -7,4 +8,7 @@
     <string name="plot_synopsis_detail">Plot Synopsis</string>
     <string name="user_rating_detail">User Rating</string>
     <string name="release_date_detail">Release Date</string>
+
+    <string name="menu_setting_popular_movies">Popular Movies</string>
+    <string name="menu_setting_top_rated_movies">Top Rated Movies</string>
 </resources>

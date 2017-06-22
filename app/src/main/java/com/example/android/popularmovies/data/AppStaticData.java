@@ -6,8 +6,8 @@ package com.example.android.popularmovies.data;
 
 public class AppStaticData {
 
-    // FIXME : never commit
-    public static final String MOVIEDB_API_QUERY_VALUE = "PasteYourAPIKey";
+    // FIXME : Set the api key, never commit
+    public static final String MOVIEDB_API_QUERY_VALUE = "YourApiKey";
 
     public static final String MOVIEDB_IMAGE_BASE_PATH = "http://image.tmdb.org/t/p/";
 

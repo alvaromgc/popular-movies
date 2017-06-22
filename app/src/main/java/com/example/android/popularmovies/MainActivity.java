@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -31,7 +32,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MovieItemAdapter.ListItemClickListener{
 
-    // TODO: code the menu to switch filter
     // TODO: code pagination on scroll
     // TODO: remove assets/raw_data.json
 
@@ -50,9 +50,28 @@ public class MainActivity extends AppCompatActivity implements MovieItemAdapter.
     JSONArray mJsonMovieArray;
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean("popularMoviesSetting", mIsPopularMoviesList);
+        savedInstanceState.putInt("currentPageSetting", mCurrentPage);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mIsPopularMoviesList = savedInstanceState.getBoolean("popularMoviesSetting");
+        mCurrentPage = savedInstanceState.getInt("currentPageSetting");
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(savedInstanceState != null){
+            mIsPopularMoviesList = savedInstanceState.getBoolean("popularMoviesSetting");
+            mCurrentPage = savedInstanceState.getInt("currentPageSetting");
+        }
 
         mErrorMessage = (TextView) findViewById(R.id.tv_error_message_display);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
@@ -92,6 +111,20 @@ public class MainActivity extends AppCompatActivity implements MovieItemAdapter.
             Log.d(TAG, "Json error :"+e.getMessage());
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemWasClicked = item.getItemId();
+        if(itemWasClicked == R.id.action_load_popular){
+            mIsPopularMoviesList = true;
+            loadMoviesData();
+        }
+        if(itemWasClicked == R.id.action_load_rated){
+            mIsPopularMoviesList = false;
+            loadMoviesData();
+        }
+        return true;
     }
 
     private void loadMoviesData(){

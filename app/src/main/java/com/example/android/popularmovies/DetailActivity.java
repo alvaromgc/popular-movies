@@ -44,7 +44,6 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intentOrigin = getIntent();
 
-        // COMPLETED (2) Display the weather forecast that was passed from MainActivity
         if (intentOrigin != null && intentOrigin.hasExtra("jsonMovieItem")) {
             try {
                 JSONObject  jsonMovieItem =
