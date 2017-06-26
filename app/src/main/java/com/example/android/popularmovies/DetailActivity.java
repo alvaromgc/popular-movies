@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -65,5 +66,15 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    //
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemWasClicked = item.getItemId();
+        if(itemWasClicked == android.R.id.home){
+            finish();
+        }
+        return true;
     }
 }
